@@ -1,0 +1,13 @@
+{
+  "source_commit": "2528536d124b2bc50e3d06e4727091d3d4fe9689",
+  "runs": [
+    {
+      "id": 36416473050,
+      "name": "Kubernetes autoscaling experiment",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/abhijith-abhii/scale-lab/actions/runs/36416473050"
+    }
+  ],
+  "date": "2026-09-28"
+}

@@ -1,0 +1,50 @@
+Observed scale-up to 6 replicas
+NAME                                            REFERENCE              TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/scale-lab   Deployment/scale-lab   cpu: 499%/60%   2         10        2          33s
+
+NAME                             READY   STATUS    RESTARTS   AGE   IP            NODE                      NOMINATED NODE   READINESS GATES
+pod/load                         1/1     Running   0          31s   10.244.0.9    scale-lab-control-plane   <none>           <none>
+pod/scale-lab-66956b7d56-6k289   1/1     Running   0          3s    10.244.0.11   scale-lab-control-plane   <none>           <none>
+pod/scale-lab-66956b7d56-fkrfg   1/1     Running   0          3s    10.244.0.12   scale-lab-control-plane   <none>           <none>
+pod/scale-lab-66956b7d56-h64nh   1/1     Running   0          3s    10.244.0.13   scale-lab-control-plane   <none>           <none>
+pod/scale-lab-66956b7d56-jlvvr   1/1     Running   0          33s   10.244.0.8    scale-lab-control-plane   <none>           <none>
+pod/scale-lab-66956b7d56-lstxt   1/1     Running   0          33s   10.244.0.7    scale-lab-control-plane   <none>           <none>
+pod/scale-lab-66956b7d56-mcx7v   1/1     Running   0          3s    10.244.0.10   scale-lab-control-plane   <none>           <none>
+
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES            SELECTOR
+deployment.apps/scale-lab   6/6     6            6           34s   worker       scale-lab:local   app=scale-lab
+Name:                                                  scale-lab
+Namespace:                                             default
+Labels:                                                <none>
+Annotations:                                           <none>
+CreationTimestamp:                                     Mon, 28 Sep 2026 11:36:15 +0000
+Reference:                                             Deployment/scale-lab
+Metrics:                                               ( current / target )
+  resource cpu on pods  (as a percentage of request):  499% (499m) / 60%
+Min replicas:                                          2
+Max replicas:                                          10
+Behavior:
+  Scale Up:
+    Stabilization Window: 0 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods     Value: 4    Period: 15 seconds
+      - Type: Percent  Value: 100  Period: 15 seconds
+  Scale Down:
+    Stabilization Window: 30 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Percent  Value: 100  Period: 15 seconds
+Deployment pods:       2 current / 6 desired
+Conditions:
+  Type            Status  Reason            Message
+  ----            ------  ------            -------
+  AbleToScale     True    SucceededRescale  the HPA controller was able to update the target scale to 6
+  ScalingActive   True    ValidMetricFound  the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  True    ScaleUpLimit      the desired replica count is increasing faster than the maximum scale rate
+Events:
+  Type     Reason                        Age   From                       Message
+  ----     ------                        ----  ----                       -------
+  Warning  FailedGetResourceMetric       18s   horizontal-pod-autoscaler  failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API
+  Warning  FailedComputeMetricsReplicas  18s   horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API
+  Normal   SuccessfulRescale             3s    horizontal-pod-autoscaler  New size: 6; reason: cpu resource utilization (percentage of request) above target

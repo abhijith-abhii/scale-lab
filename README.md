@@ -29,7 +29,7 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-Open **http://127.0.0.1:8080**. Keep the process running. Set `PORT` to use another port (Retention Studio uses `--port`). The Python development servers are intended for local demonstrations.
+Open **http://127.0.0.1:8080**. Keep the process running. Set `PORT` to use another port. The Python development servers are intended for local demonstrations.
 
 ## Demonstration
 
@@ -51,7 +51,7 @@ Stack: Kubernetes · kind · Python.
 python -m pytest -q
 ```
 
-See [VERIFICATION.md](VERIFICATION.md) for actual executed checks, setup verification, model/data results and any outstanding environment limitations. A workflow file alone is not evidence that CI passed.
+See [VERIFICATION.md](VERIFICATION.md) for actual executed checks, setup verification, model/data results and any outstanding environment limitations. The [recorded CI runs](reports/ci-verification.json) passed for the linked source revision.
 
 ## Data and attribution
 
@@ -66,3 +66,24 @@ Suggested extension: Change CPU requests and explain why the same absolute CPU c
 ## Honest portfolio use
 
 This implementation and documentation were developed with substantial Codex assistance. Before presenting it, run the demonstration, explain the design choices, and complete the suggested independent modification. Do not describe generated code as work experience, an accepted upstream contribution, or a deployed production service.
+
+## Reproduce the cluster experiment
+
+Install Docker, kind and kubectl first. The [CI workflow](.github/workflows/test.yml) is the verified full sequence. A local cluster uses your machine, not a paid cloud account:
+
+```sh
+kind create cluster --name scale-lab
+docker build -t scale-lab:local .
+kind load docker-image scale-lab:local --name scale-lab
+kubectl --context kind-scale-lab apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.7.2/components.yaml
+kubectl --context kind-scale-lab patch deployment metrics-server -n kube-system --type=json -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+kubectl --context kind-scale-lab rollout status deployment/metrics-server -n kube-system --timeout=180s
+kubectl --context kind-scale-lab apply -f k8s.yaml
+kubectl --context kind-scale-lab rollout status deployment/scale-lab --timeout=120s
+kubectl --context kind-scale-lab run load --image=busybox:1.36 --restart=Never -- /bin/sh -c 'for i in 1 2 3 4 5 6 7 8; do while true; do wget -q -O- http://scale-lab/work; done & done; wait'
+kubectl --context kind-scale-lab get hpa,pods,deployments -w
+# After finishing, remove this disposable test cluster:
+kind delete cluster --name scale-lab
+```
+
+The kubelet TLS exception is only for this disposable kind experiment. The saved first CI observation is [two to six available replicas](reports/hpa-evidence.txt).
