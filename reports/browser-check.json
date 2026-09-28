@@ -1,0 +1,8 @@
+{
+  "slug": "scale-lab",
+  "heading": "Scale Lab",
+  "scrollWidth": 1280,
+  "viewport": 1280,
+  "default_ui_result": "rendered successfully",
+  "screenshot": "screenshots/app.png"
+}

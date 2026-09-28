@@ -1,0 +1,9 @@
+{
+  "slug": "scale-lab",
+  "fresh_venv": "work/clean-envs/scale-lab",
+  "fresh_checkout": "work/clean/scale-lab",
+  "passed": true,
+  "failure": null,
+  "runtime": "Python 3.12.14",
+  "model_training": null
+}

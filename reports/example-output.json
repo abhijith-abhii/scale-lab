@@ -1,0 +1,14 @@
+{
+  "answer": "ceil(2 \u00d7 120 / 60), with 10% tolerance and 2\u201310 bounds.",
+  "details": {
+    "HPA_target": "60%",
+    "cpu_requests": "100m per pod",
+    "real_validation": "See reports/ci-evidence.json after the Kubernetes workflow completes."
+  },
+  "metrics": {
+    "Calculated desired": 4,
+    "Current replicas": 2,
+    "Minimum / maximum": "2 / 10"
+  },
+  "notice": "Educational calculation, not a live cluster reading. Kubernetes also accounts for missing metrics, readiness, stabilization and scale policies."
+}
