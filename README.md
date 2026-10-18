@@ -87,3 +87,7 @@ kind delete cluster --name scale-lab
 ```
 
 The kubelet TLS exception is only for this disposable kind experiment. The saved first CI observation is [two to six available replicas](reports/hpa-evidence.txt).
+
+## Connect
+
+[LinkedIn — Abhijith Viswanathan](https://www.linkedin.com/in/abhijith-viswanathan-0a7216436/)
